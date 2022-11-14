@@ -1,15 +1,19 @@
 const base = require('@playwright/test')
+const dotenv = require('dotenv').config();
+
+const SECRET = process.env.SECRET;
+const API_KEY = process.env.API_KEY;
 
 const test = base.test.extend({
   browser: async ({
     playwright,
     browserName,
-    
+    headless,
     channel,
     launchOptions
   }, use) => {
     const browser = await playwright.chromium.connectOverCDP({
-      wsEndpoint: 'wss://cloud.testingbot.com?key=b0b09a9a1b86ac0998b4de020c23a95d&secret=044045052257b0d3cdd8eda2eaa1c3b5&browserName=chrome&browserVersion=latest',
+      wsEndpoint: `wss://cloud.testingbot.com?key=${API_KEY}&secret=${SECRET}&browserName=chrome&browserVersion=latest`,
     });
     await use(browser)
     await browser.close()
