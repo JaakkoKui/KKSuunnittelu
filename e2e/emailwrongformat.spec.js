@@ -1,10 +1,13 @@
 import { test, expect } from '@playwright/test';
 const dotenv = require('dotenv').config();
+import matchers from 'expect-axe-playwright'
+
+expect.extend(matchers)
 
 const SECRET = process.env.SECRET;
 const API_KEY = process.env.API_KEY;
 
-const test = base.test.extend({
+test.extend({
   browser: async ({
     playwright,
     browserName,
@@ -31,11 +34,18 @@ test('Yle Areena Sign Up Email wrong format test'
 
   await page.goto('https://areena.yle.fi/tv');
   await expect(page).toHaveTitle('Yle Areena – Enemmän kuin ehdit katsoa ja kuunnella | TV | Areena | yle.fi')
+  await expect(page).not.toPassAxe({
+    filename: "Wrong-format-report.html"
+  })
 
   const getStarted = page.getByRole('button', { name: 'Kirjaudu' });
   //await page.getByRole('button', { name: 'Kirjaudu' }).click();
   await getStarted.click();
   
+  await expect(page).not.toPassAxe({
+    filename: "New-User-report.html"
+  })
+
   await page.frameLocator('role=dialog[name="kirjaudu sisään"] >> iframe').getByRole('link', { name: 'Luo Yle Tunnus' }).click();
 
   await page.frameLocator('role=dialog[name="kirjaudu sisään"] >> iframe').getByLabel('Sähköposti').fill('aaaaaaa');

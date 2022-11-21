@@ -1,10 +1,13 @@
-const base = require('@playwright/test')
+import { test, expect } from '@playwright/test';
 const dotenv = require('dotenv').config();
+import matchers from 'expect-axe-playwright'
+
+expect.extend(matchers)
 
 const SECRET = process.env.SECRET;
 const API_KEY = process.env.API_KEY;
 
-const test = base.test.extend({
+test.extend({
   browser: async ({
     playwright,
     browserName,
@@ -25,17 +28,20 @@ test('Test logos and names', async ({ page }) => {
 
   await page.goto('https://testingbot.com')
   const title = await page.title()
-  base.expect(title).toMatch('TestingBot')
+  expect(title).toMatch('TestingBot')
 
   await page.goto('https://areena.yle.fi/tv/opas');
+  await expect(page).not.toPassAxe({
+    filename: "Nameandlogo-report.html"
+  })
 
   const TV1 = page.locator('[aria-label="Yle TV1"]')
-  await base.expect(TV1).toHaveClass('channel-header__logo ')
+  await expect(TV1).toHaveClass('channel-header__logo ')
 
   const TV2 = page.locator('[aria-label="Yle TV2"]')
-  await base.expect(TV2).toHaveClass('channel-header__logo ')
+  await expect(TV2).toHaveClass('channel-header__logo ')
 
   const HERO = page.locator('[aria-label="Hero"]')
-  await base.expect(HERO).toHaveClass('channel-header__logo ')
+  await expect(HERO).toHaveClass('channel-header__logo ')
 
 })

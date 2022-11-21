@@ -1,10 +1,13 @@
-const base = require('@playwright/test')
+import { test, expect } from '@playwright/test';
 const dotenv = require('dotenv').config();
+import matchers from 'expect-axe-playwright'
+
+expect.extend(matchers)
 
 const SECRET = process.env.SECRET;
 const API_KEY = process.env.API_KEY;
 
-const test = base.test.extend({
+test.extend({
   browser: async ({
     playwright,
     browserName,
@@ -23,25 +26,32 @@ const test = base.test.extend({
 test('Kummelin 3 kauden 5 jakso', async ({ page }) => {
   await page.goto('https://testingbot.com')
   const title = await page.title()
-  base.expect(title).toMatch('TestingBot')
+  expect(title).toMatch('TestingBot')
 
   await page.goto('https://areena.yle.fi/1-3339547');
+  await expect(page).not.toPassAxe({
+    filename: 'kummeli-report.html',
+  });
 
   // create a locator
   const getStarted = page.getByRole('button', { name: 'Kausi 3' });
   // Expect an attribute "to be strictly equal" to the value.
-  await base.expect(getStarted).toHaveAttribute('aria-current', 'false');
+  await expect(getStarted).toHaveAttribute('aria-current', 'false');
 
   await getStarted.click();
 
   const jakso = page.getByText('Jakso 5');
-  await base.expect(jakso).toHaveText('Jakso 5: Kummeli');
+  await expect(jakso).toHaveText('Jakso 5: Kummeli');
   await jakso.click();
 
+  await expect(page).toPassAxe({
+    filename: 'kummeli-episode-report.html',
+  });
+
   const header = page.locator('h1');
-  await base.expect(header).toHaveText('K3, J5: Kummeli');
+  await expect(header).toHaveText('K3, J5: Kummeli');
 
   const pvm = page.locator('time', {hasText: "julkaistu"});
-  await base.expect(pvm).toHaveText('julkaistu ti 10.1.2006');
+  await expect(pvm).toHaveText('julkaistu ti 10.1.2006');
 
 })

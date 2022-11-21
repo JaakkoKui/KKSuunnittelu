@@ -1,10 +1,13 @@
 import { test, expect } from '@playwright/test';
+import matchers from 'expect-axe-playwright'
+
+expect.extend(matchers)
 const dotenv = require('dotenv').config();
 
 const SECRET = process.env.SECRET;
 const API_KEY = process.env.API_KEY;
 
-const test = base.test.extend({
+test.extend({
   browser: async ({
     playwright,
     browserName,
@@ -24,8 +27,13 @@ test('test', async ({ page }) => {
 
   await page.goto('https://testingbot.com')
   const title = await page.title()
-  base.expect(title).toMatch('TestingBot')
+  expect(title).toMatch('TestingBot')
 
   await page.goto('https://areena.yle.fi/tv/opas');
+  await expect(page).not.toPassAxe({
+    filename: "kymmenen-uutiset-report.html"
+  })
   const uutiset = await page.$$('span:has-text("22.00 Kymmenen uutiset")');
+
+  
 });
