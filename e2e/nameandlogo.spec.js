@@ -32,7 +32,7 @@ test('Test logos and names', async ({ page }) => {
 
   await page.goto('https://areena.yle.fi/tv/opas');
   await expect(page).not.toPassAxe({
-    filename: "Nameandlogo-report-tue-22-11.html"
+    filename: "Nameandlogo-report-wed-23-11.html"
   })
 
   const TV1 = page.locator('[aria-label="Yle TV1"]')
