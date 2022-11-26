@@ -11,7 +11,6 @@ test.extend({
   browser: async ({
     playwright,
     browserName,
-    headless,
     channel,
     launchOptions
   }, use) => {
@@ -35,7 +34,7 @@ test('Yle Areena Sign Up Email wrong format test'
   await page.goto('https://areena.yle.fi/tv');
   await expect(page).toHaveTitle('Yle Areena – Enemmän kuin ehdit katsoa ja kuunnella | TV | Areena | yle.fi')
   await expect(page).not.toPassAxe({
-    filename: "Wrong-format-report-wed-23-11.html"
+    filename: "Wrong-format-report-sat-26-11.html"
   })
 
   const getStarted = page.getByRole('button', { name: 'Kirjaudu' });
@@ -43,7 +42,7 @@ test('Yle Areena Sign Up Email wrong format test'
   await getStarted.click();
   
   await expect(page).not.toPassAxe({
-    filename: "Kirjaudu-sisaan-report-wed-23-11.html"
+    filename: "Kirjaudu-sisaan-report-sat-26-11.html"
   })
 
   await page.frameLocator('role=dialog[name="kirjaudu sisään"] >> iframe').getByRole('link', { name: 'Luo Yle Tunnus' }).click();
