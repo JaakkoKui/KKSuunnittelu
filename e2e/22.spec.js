@@ -30,7 +30,7 @@ test('test', async ({ page }) => {
 
   await page.goto('https://areena.yle.fi/tv/opas');
   await expect(page).not.toPassAxe({
-    filename: "kymmenen-uutiset-report-sat-26-11.html"
+    filename: "kymmenen-uutiset-report-sun-27-11.html"
   })
 
   const uutiset = page.locator('span', {hasText: "Kymmenen uutiset"});
