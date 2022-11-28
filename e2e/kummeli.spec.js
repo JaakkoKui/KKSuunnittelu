@@ -29,7 +29,7 @@ test('Kummelin 3 kauden 5 jakso', async ({ page }) => {
 
   await page.goto('https://areena.yle.fi/1-3339547');
   await expect(page).not.toPassAxe({
-    filename: 'kummeli-report-sun-27-11.html',
+    filename: 'kummeli-report-mon-28-11.html',
   });
 
   // create a locator
@@ -44,7 +44,7 @@ test('Kummelin 3 kauden 5 jakso', async ({ page }) => {
   await jakso.click();
 
   await expect(page).toPassAxe({
-    filename: 'kummeli-episode-report-sun-27-11.html',
+    filename: 'kummeli-episode-report-mon-28-11.html',
   });
 
   const header = page.locator('h1');
